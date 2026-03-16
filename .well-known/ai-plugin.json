@@ -1,0 +1,17 @@
+{
+  "schema_version": "v1",
+  "name_for_human": "Gary's Tech Hub",
+  "name_for_model": "garys_tech_hub",
+  "description_for_human": "Professional computer repair, tech support, and IT services in Ireland.",
+  "description_for_model": "Gary's Tech Hub provides computer repair, laptop repair, virus removal, data recovery, network setup, and IT support services for home and business customers in Ireland. Located at garystechhub.ie.",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://garystechhub.ie/openapi.yaml"
+  },
+  "logo_url": "https://garystechhub.ie/favicon.ico",
+  "contact_email": "",
+  "legal_info_url": "https://garystechhub.ie/privacy-policy"
+}

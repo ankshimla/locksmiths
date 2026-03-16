@@ -1,0 +1,23 @@
+# Gary's Tech Hub
+
+> Gary's Tech Hub provides professional computer repair, tech support, and IT services in Ireland.
+
+## About
+Gary's Tech Hub (garystechhub.ie) is a local technology services business offering computer repair, laptop repair, virus removal, data recovery, network setup, and general IT support for home and business customers in Ireland.
+
+## Services
+- Computer & Laptop Repair
+- Virus & Malware Removal
+- Data Recovery
+- Network Setup & Troubleshooting
+- Hardware Upgrades
+- Software Installation & Configuration
+- IT Support & Consultancy
+- Smart Home Setup
+
+## Contact
+- Website: https://garystechhub.ie
+- Location: Ireland
+
+## Sitemap
+- https://garystechhub.ie/sitemap.xml
