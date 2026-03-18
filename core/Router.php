@@ -35,6 +35,7 @@ class Router {
 
         // 404
         http_response_code(404);
+        require_once __DIR__ . '/../app/controllers/PageController.php';
         $controller = new PageController();
         $controller->notFound();
     }
