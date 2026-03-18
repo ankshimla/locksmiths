@@ -1,23 +1,39 @@
-# Gary's Tech Hub
+# Locksmiths.ie - Ireland's #1 Locksmith Service
 
-> Gary's Tech Hub provides professional computer repair, tech support, and IT services in Ireland.
+> Locksmiths.ie provides 24/7 professional locksmith services across Dublin and all of Ireland.
 
 ## About
-Gary's Tech Hub (garystechhub.ie) is a local technology services business offering computer repair, laptop repair, virus removal, data recovery, network setup, and general IT support for home and business customers in Ireland.
+Locksmiths.ie is Ireland's highest-rated locksmith company with 20+ years of experience. We offer emergency lockout services, lock changes, car key replacement, CCTV installation, access control systems, and comprehensive security solutions for homes, businesses, and vehicles.
 
 ## Services
-- Computer & Laptop Repair
-- Virus & Malware Removal
-- Data Recovery
-- Network Setup & Troubleshooting
-- Hardware Upgrades
-- Software Installation & Configuration
-- IT Support & Consultancy
-- Smart Home Setup
+- Emergency Locksmiths (24/7)
+- Auto Locksmiths
+- Car Keys Dublin & Ireland
+- Transponder Key Programming
+- Master Key Systems
+- Lock Changes & Upgrades
+- CCTV Installation
+- Access Control Systems
+- Safe Opening & Installation
+- Slam Locks for Vans
+
+## Service Areas
+- Dublin (all areas)
+- Swords, Lucan, Blanchardstown, Tallaght, Dundrum
+- Dun Laoghaire, Rathmines, Rathfarnham
+- Artane, Blackrock, Ballsbridge, Castleknock
+- Finglas, Clondalkin, Ballyfermot
+- And 30+ more locations across Ireland
+
+## Car Brands Serviced
+Audi, BMW, Ford, Toyota, Volkswagen, Mercedes, Hyundai, Nissan, and more
 
 ## Contact
-- Website: https://garystechhub.ie
-- Location: Ireland
+- Website: https://locksmiths.ie
+- Phone: 01 234 5678
+- Email: info@locksmiths.ie
+- Location: Dublin, Ireland
+- Hours: 24/7, 365 Days
 
 ## Sitemap
-- https://garystechhub.ie/sitemap.xml
+- https://locksmiths.ie/sitemap.xml

@@ -1,17 +1,17 @@
 {
-  "schema_version": "v1",
-  "name_for_human": "Gary's Tech Hub",
-  "name_for_model": "garys_tech_hub",
-  "description_for_human": "Professional computer repair, tech support, and IT services in Ireland.",
-  "description_for_model": "Gary's Tech Hub provides computer repair, laptop repair, virus removal, data recovery, network setup, and IT support services for home and business customers in Ireland. Located at garystechhub.ie.",
-  "auth": {
-    "type": "none"
-  },
-  "api": {
-    "type": "openapi",
-    "url": "https://garystechhub.ie/openapi.yaml"
-  },
-  "logo_url": "https://garystechhub.ie/favicon.ico",
-  "contact_email": "",
-  "legal_info_url": "https://garystechhub.ie/privacy-policy"
+    "schema_version": "v1",
+    "name_for_human": "Locksmiths.ie",
+    "name_for_model": "locksmiths_ie",
+    "description_for_human": "Ireland's #1 24/7 locksmith service. Emergency lockouts, car keys, CCTV, access control across Dublin and Ireland.",
+    "description_for_model": "Professional locksmith services in Ireland including emergency lockouts, lock changes, car key replacement, transponder programming, CCTV installation, access control systems, master key systems, and safe services. Available 24/7 across Dublin and all of Ireland.",
+    "auth": {
+        "type": "none"
+    },
+    "api": {
+        "type": "openapi",
+        "url": "https://locksmiths.ie/openapi.json"
+    },
+    "logo_url": "https://locksmiths.ie/public/images/logo.png",
+    "contact_email": "info@locksmiths.ie",
+    "legal_info_url": "https://locksmiths.ie/terms"
 }
