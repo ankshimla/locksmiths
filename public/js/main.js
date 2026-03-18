@@ -187,8 +187,9 @@
    */
   function handleFormSubmit(form, endpoint) {
     const submitBtn = form.querySelector('[type="submit"]');
-    const successMsg = form.querySelector('.form-success');
-    const errorMsg = form.querySelector('.form-error');
+    const parent = form.parentElement;
+    const successMsg = parent.querySelector('.form-success') || form.querySelector('.form-success');
+    const errorMsg = parent.querySelector('.form-error') || form.querySelector('.form-error');
 
     on(form, 'submit', async (e) => {
       e.preventDefault();
@@ -257,8 +258,9 @@
   }
 
   function initForms() {
-    // Quote form (hero or standalone)
-    const quoteForm = $('#quote-form');
+    // Quote form (hero or standalone) - select the form inside the card
+    const quoteFormCard = $('#quote-form');
+    const quoteForm = quoteFormCard ? $('form', quoteFormCard) : null;
     if (quoteForm) handleFormSubmit(quoteForm, '/api/quote');
 
     // Contact form
@@ -280,9 +282,10 @@
   function initScrollAnimations() {
     if (!('IntersectionObserver' in window)) {
       // Fallback: show everything immediately
-      $$('.animate-on-scroll, .animate-fade').forEach((el) =>
-        el.classList.add('animate-in')
-      );
+      $$('.animate-on-scroll, .animate-fade').forEach((el) => {
+        el.classList.add('animate-in');
+        el.classList.add('is-visible');
+      });
       return;
     }
 
@@ -291,6 +294,7 @@
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('animate-in');
+            entry.target.classList.add('is-visible');
             observer.unobserve(entry.target); // Animate once only
           }
         });

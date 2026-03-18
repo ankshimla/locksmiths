@@ -1,5 +1,14 @@
 RewriteEngine On
 
-# Redirect to public folder
-RewriteRule ^$ public/ [L]
+# If public/ folder files exist, serve them
+RewriteCond %{REQUEST_URI} ^/public/
+RewriteRule ^public/(.*)$ public/$1 [L]
+
+# Serve static assets directly from public/
+RewriteCond %{DOCUMENT_ROOT}/public%{REQUEST_URI} -f
 RewriteRule ^(.+)$ public/$1 [L]
+
+# Route everything else through root index.php (which loads public/index.php)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]

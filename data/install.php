@@ -137,9 +137,16 @@ function installDatabase(): void {
         $stmt->execute([$s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $i]);
     }
 
-    // Seed locations
+    // Seed locations - Dublin suburbs + major cities
     $locations = [
         ['dublin', 'Dublin', 'Dublin', 'Locksmiths Dublin | 24/7 Emergency Locksmith | Locksmiths.ie', 'Professional locksmith services in Dublin. Emergency lockouts, lock changes, car keys. Fast response across Dublin city and county.', 53.3498, -6.2603],
+        ['swords', 'Swords', 'Dublin', 'Locksmiths Swords | 24/7 Emergency Locksmith | Locksmiths.ie', 'Fast emergency locksmith services in Swords, North Dublin. Lock changes, car keys, CCTV installation. 30 minute response.', 53.4597, -6.2181],
+        ['lucan', 'Lucan', 'Dublin', 'Locksmiths Lucan | 24/7 Emergency Locksmith | Locksmiths.ie', 'Trusted locksmith services in Lucan, West Dublin. Emergency lockouts, lock repairs, key cutting. Available 24/7.', 53.3564, -6.4497],
+        ['blanchardstown', 'Blanchardstown', 'Dublin', 'Locksmiths Blanchardstown | 24/7 Locksmith | Locksmiths.ie', 'Expert locksmith services in Blanchardstown, Dublin 15. Emergency response, lock changes, car key replacement.', 53.3888, -6.3756],
+        ['tallaght', 'Tallaght', 'Dublin', 'Locksmiths Tallaght | Emergency Locksmith | Locksmiths.ie', 'Reliable locksmith services in Tallaght, South Dublin. 24/7 emergency callouts, lock installations, car keys.', 53.2876, -6.3542],
+        ['dundrum', 'Dundrum', 'Dublin', 'Locksmiths Dundrum | 24/7 Locksmith Services | Locksmiths.ie', 'Professional locksmith services in Dundrum, Dublin 14. Emergency lockouts, lock upgrades, security solutions.', 53.2922, -6.2458],
+        ['dun-laoghaire', 'Dun Laoghaire', 'Dublin', 'Locksmiths Dun Laoghaire | Emergency Locksmith | Locksmiths.ie', 'Expert locksmith services in Dun Laoghaire. Emergency lockouts, residential and commercial lock services. Fast response.', 53.2945, -6.1348],
+        ['rathmines', 'Rathmines', 'Dublin', 'Locksmiths Rathmines | 24/7 Locksmith | Locksmiths.ie', 'Trusted locksmith services in Rathmines, Dublin 6. Emergency lockouts, lock changes, key cutting, CCTV.', 53.3224, -6.2632],
         ['cork', 'Cork', 'Cork', 'Locksmiths Cork | 24/7 Locksmith Services | Locksmiths.ie', 'Expert locksmith services in Cork. Emergency callouts, lock repairs, car key replacement across Cork city and county.', 51.8985, -8.4756],
         ['galway', 'Galway', 'Galway', 'Locksmiths Galway | Emergency Locksmith | Locksmiths.ie', 'Reliable locksmith services in Galway. 24/7 emergency response, lock installations, and car key services.', 53.2707, -9.0568],
         ['limerick', 'Limerick', 'Limerick', 'Locksmiths Limerick | 24/7 Locksmith | Locksmiths.ie', 'Professional locksmith services in Limerick. Fast emergency response, residential and commercial services.', 52.6638, -8.6267],

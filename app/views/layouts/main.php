@@ -19,7 +19,7 @@
     <!-- Schema markup injected per page -->
     <?= $schemaMarkup ?? '' ?>
 </head>
-<body>
+<body class="has-sticky-bar">
     <?php require __DIR__ . '/../partials/header.php'; ?>
 
     <main id="main-content">

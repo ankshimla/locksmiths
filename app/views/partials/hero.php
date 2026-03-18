@@ -1,74 +1,65 @@
-<section class="hero" aria-label="Hero section">
-    <div class="hero__bg-overlay" aria-hidden="true"></div>
+<section class="hero" id="hero" aria-label="Hero section">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-overlay" aria-hidden="true"></div>
 
-    <div class="container hero__container">
+    <div class="hero-content">
+        <div class="container">
+            <div class="hero-inner">
 
-        <!-- Left column: text + CTAs -->
-        <div class="hero__content">
+                <!-- Left column: text + CTAs -->
+                <div class="hero-text">
 
-            <?php if (!empty($breadcrumbs)): ?>
-                <?php require __DIR__ . '/breadcrumbs.php'; ?>
-            <?php endif; ?>
+                    <div class="hero-badge">
+                        &#9733; Ireland's #1 Rated Locksmith
+                    </div>
 
-            <h1 class="hero__title">
-                <?= htmlspecialchars($heroTitle ?? 'Expert Locksmith Services in Dublin &amp; Ireland') ?>
-            </h1>
+                    <h1>
+                        <?= htmlspecialchars($heroTitle ?? 'Expert Locksmith Services in Dublin & Ireland') ?>
+                        <span><?= htmlspecialchars($heroSubtitle ?? '24/7 Emergency Response') ?></span>
+                    </h1>
 
-            <?php if (!empty($heroSubtitle)): ?>
-                <p class="hero__subtitle">
-                    <?= htmlspecialchars($heroSubtitle) ?>
-                </p>
-            <?php endif; ?>
+                    <p class="hero-subtitle">
+                        Trusted by thousands of Irish homes and businesses. Fast, certified, and affordable locksmith services — day or night.
+                    </p>
 
-            <!-- Trust badges -->
-            <ul class="trust-badges" role="list" aria-label="Trust indicators">
-                <li class="trust-badge">
-                    <span class="trust-badge__icon" aria-hidden="true">&#9733;</span>
-                    <span class="trust-badge__text">
-                        <strong>20+ Years</strong>
-                        <span>Experience</span>
-                    </span>
-                </li>
-                <li class="trust-badge">
-                    <span class="trust-badge__icon" aria-hidden="true">&#128336;</span>
-                    <span class="trust-badge__text">
-                        <strong>24/7</strong>
-                        <span>Available</span>
-                    </span>
-                </li>
-                <li class="trust-badge">
-                    <span class="trust-badge__icon" aria-hidden="true">&#127941;</span>
-                    <span class="trust-badge__text">
-                        <strong>Highest Rated</strong>
-                        <span>4.9 Stars</span>
-                    </span>
-                </li>
-                <li class="trust-badge">
-                    <span class="trust-badge__icon" aria-hidden="true">&#128663;</span>
-                    <span class="trust-badge__text">
-                        <strong>30 Min</strong>
-                        <span>Response</span>
-                    </span>
-                </li>
-            </ul>
+                    <!-- CTA buttons -->
+                    <div class="hero-actions">
+                        <a href="<?= SITE_PHONE_LINK ?>" class="btn btn-call btn-lg">
+                            &#128222; Call Now – <?= htmlspecialchars(SITE_PHONE) ?>
+                        </a>
+                        <a href="#quote-form" class="btn btn-primary btn-lg">
+                            Get a Free Quote
+                        </a>
+                    </div>
 
-            <!-- CTA buttons -->
-            <div class="hero__cta-group">
-                <a href="<?= SITE_PHONE_LINK ?>" class="btn btn--green btn--lg hero__cta-call">
-                    <span aria-hidden="true">&#128222;</span>
-                    Call Now – <?= htmlspecialchars(SITE_PHONE) ?>
-                </a>
-                <a href="#quote-form" class="btn btn--gold btn--lg hero__cta-quote">
-                    Get a Free Quote
-                </a>
-            </div>
+                    <!-- Stats -->
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <strong>20+</strong>
+                            <span>Years</span>
+                        </div>
+                        <div class="hero-stat">
+                            <strong>4.9&#9733;</strong>
+                            <span>Rating</span>
+                        </div>
+                        <div class="hero-stat">
+                            <strong>30min</strong>
+                            <span>Response</span>
+                        </div>
+                        <div class="hero-stat">
+                            <strong>24/7</strong>
+                            <span>Available</span>
+                        </div>
+                    </div>
 
-        </div><!-- /.hero__content -->
+                </div><!-- /.hero-text -->
 
-        <!-- Right column: quote form -->
-        <div class="hero__form-col">
-            <?php require __DIR__ . '/quote-form.php'; ?>
-        </div>
+                <!-- Right column: quote form -->
+                <div class="hero-form-wrap">
+                    <?php require __DIR__ . '/quote-form.php'; ?>
+                </div>
 
-    </div><!-- /.hero__container -->
+            </div><!-- /.hero-inner -->
+        </div><!-- /.container -->
+    </div><!-- /.hero-content -->
 </section>

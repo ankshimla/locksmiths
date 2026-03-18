@@ -25,6 +25,16 @@ foreach (glob(__DIR__ . '/../app/models/*.php') as $model) {
 
 // Initialize database if needed
 if (!file_exists(DB_PATH)) {
+    // Ensure data directory exists and is writable
+    $dataDir = dirname(DB_PATH);
+    if (!is_dir($dataDir)) {
+        @mkdir($dataDir, 0755, true);
+    }
+    if (!is_writable($dataDir)) {
+        // Redirect to setup wizard
+        header('Location: /index.php?setup=1');
+        exit;
+    }
     require_once __DIR__ . '/../data/install.php';
     installDatabase();
 }

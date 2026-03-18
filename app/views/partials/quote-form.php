@@ -1,9 +1,9 @@
-<div class="quote-form-card glass-card" id="quote-form">
-    <h2 class="quote-form__title">Get a Free Quote</h2>
-    <p class="quote-form__subtitle">We'll call you back within minutes</p>
+<div class="quote-form-card" id="quote-form">
+    <h3>Get a Free Quote</h3>
+    <p class="form-subtitle">We'll call you back within minutes</p>
 
     <form
-        class="quote-form__form"
+        class="quote-form"
         method="POST"
         action="/api/quote"
         data-ajax="true"
@@ -12,52 +12,23 @@
     >
 
         <div class="form-group">
-            <label for="quote-name" class="form-label">
-                Your Name <span class="form-required" aria-label="required">*</span>
-            </label>
-            <input
-                type="text"
-                id="quote-name"
-                name="name"
-                class="form-input"
-                placeholder="e.g. John Murphy"
-                required
-                autocomplete="name"
-                aria-required="true"
-            >
+            <label for="quote-name">Your Name *</label>
+            <input type="text" id="quote-name" name="name" placeholder="e.g. John Murphy" required autocomplete="name">
         </div>
 
         <div class="form-group">
-            <label for="quote-phone" class="form-label">
-                Phone Number <span class="form-required" aria-label="required">*</span>
-            </label>
-            <input
-                type="tel"
-                id="quote-phone"
-                name="phone"
-                class="form-input"
-                placeholder="e.g. 085 123 4567"
-                required
-                autocomplete="tel"
-                aria-required="true"
-            >
+            <label for="quote-phone">Phone Number *</label>
+            <input type="tel" id="quote-phone" name="phone" placeholder="e.g. 085 123 4567" required autocomplete="tel">
         </div>
 
         <div class="form-group">
-            <label for="quote-email" class="form-label">Email Address</label>
-            <input
-                type="email"
-                id="quote-email"
-                name="email"
-                class="form-input"
-                placeholder="you@example.com"
-                autocomplete="email"
-            >
+            <label for="quote-email">Email Address</label>
+            <input type="email" id="quote-email" name="email" placeholder="you@example.com" autocomplete="email">
         </div>
 
         <div class="form-group">
-            <label for="quote-service" class="form-label">Service Required</label>
-            <select id="quote-service" name="service" class="form-select">
+            <label for="quote-service">Service Required</label>
+            <select id="quote-service" name="service">
                 <option value="" disabled selected>Select a service&hellip;</option>
                 <option value="emergency-locksmith">Emergency Locksmith</option>
                 <option value="auto-locksmith">Auto Locksmith</option>
@@ -72,8 +43,8 @@
         </div>
 
         <div class="form-group">
-            <label for="quote-location" class="form-label">Your Location</label>
-            <select id="quote-location" name="location" class="form-select">
+            <label for="quote-location">Your Location</label>
+            <select id="quote-location" name="location">
                 <option value="" disabled selected>Select your area&hellip;</option>
                 <option value="dublin">Dublin City</option>
                 <option value="swords">Swords</option>
@@ -83,29 +54,25 @@
                 <option value="dundrum">Dundrum</option>
                 <option value="dun-laoghaire">Dun Laoghaire</option>
                 <option value="rathmines">Rathmines</option>
+                <option value="cork">Cork</option>
+                <option value="galway">Galway</option>
                 <option value="other">Other</option>
             </select>
         </div>
 
         <div class="form-group">
-            <label for="quote-message" class="form-label">Additional Details</label>
-            <textarea
-                id="quote-message"
-                name="message"
-                class="form-textarea"
-                rows="3"
-                placeholder="Briefly describe your situation&hellip;"
-            ></textarea>
+            <label for="quote-message">Additional Details</label>
+            <textarea id="quote-message" name="message" rows="3" placeholder="Briefly describe your situation&hellip;"></textarea>
         </div>
 
-        <button type="submit" class="btn btn--gold btn--full quote-form__submit">
-            <span class="btn-text">Request Free Quote</span>
-            <span class="btn-loading" aria-hidden="true" hidden>Sending&hellip;</span>
+        <button type="submit" class="btn btn-primary btn-submit">
+            Request Free Quote
         </button>
 
     </form>
 
     <!-- Success / error feedback -->
-    <div class="quote-form__message" id="quote-form-message" role="alert" aria-live="polite" hidden></div>
+    <div class="form-success" id="quote-form-success" role="alert">Thank you! We'll call you back shortly.</div>
+    <div class="form-error" id="quote-form-error" role="alert">Something went wrong. Please call us directly.</div>
 
 </div><!-- /.quote-form-card -->

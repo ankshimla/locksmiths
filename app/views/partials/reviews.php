@@ -1,66 +1,43 @@
-<section class="reviews-section" aria-label="Customer reviews">
-    <div class="container">
+<?php if (!empty($reviews)): ?>
+<div class="section-header">
+    <span class="section-label">Testimonials</span>
+    <h2 class="section-title section-title--light">What Our Customers Say</h2>
+    <p class="section-desc section-desc--light">Rated 4.9/5 from 387+ verified reviews</p>
+</div>
 
-        <div class="section-header reviews-section__header">
-            <h2 class="section-title">What Our Customers Say</h2>
+<div class="reviews-grid">
+    <?php foreach ($reviews as $review): ?>
+        <div class="review-card">
+            <!-- Star rating -->
+            <div class="review-stars star-rating" aria-label="<?= (int)($review['rating'] ?? 5) ?> out of 5 stars">
+                <?php
+                $rating = (int)($review['rating'] ?? 5);
+                for ($i = 1; $i <= 5; $i++):
+                ?>
+                    <span class="<?= $i <= $rating ? 'star-filled' : 'star-empty' ?>" aria-hidden="true">
+                        <?= $i <= $rating ? '&#9733;' : '&#9734;' ?>
+                    </span>
+                <?php endfor; ?>
+            </div>
 
-            <!-- Google-style aggregate rating badge -->
-            <div class="rating-badge" aria-label="Rated 4.9 out of 5 from 387 reviews">
-                <span class="rating-badge__logo" aria-hidden="true">G</span>
-                <div class="rating-badge__info">
-                    <div class="rating-badge__stars" aria-hidden="true">
-                        <span class="star star--full">&#9733;</span>
-                        <span class="star star--full">&#9733;</span>
-                        <span class="star star--full">&#9733;</span>
-                        <span class="star star--full">&#9733;</span>
-                        <span class="star star--full">&#9733;</span>
+            <!-- Review text -->
+            <div class="review-text">
+                <p><?= htmlspecialchars($review['text'] ?? $review['review_text'] ?? '') ?></p>
+            </div>
+
+            <!-- Reviewer info -->
+            <div class="review-author">
+                <div class="review-avatar">
+                    <?= strtoupper(substr($review['name'] ?? $review['customer_name'] ?? 'A', 0, 1)) ?>
+                </div>
+                <div>
+                    <div class="review-author-name">
+                        <?= htmlspecialchars($review['name'] ?? $review['customer_name'] ?? 'Customer') ?>
                     </div>
-                    <div class="rating-badge__score">
-                        <strong>4.9</strong>
-                        <span class="rating-badge__count">/ 5 &bull; 387 reviews</span>
-                    </div>
+                    <div class="review-author-location">Verified Customer</div>
                 </div>
             </div>
-        </div><!-- /.section-header -->
-
-        <?php if (!empty($reviews)): ?>
-            <ul class="reviews-grid" role="list">
-                <?php foreach ($reviews as $review): ?>
-                    <li class="review-card">
-                        <!-- Star rating -->
-                        <div class="review-card__stars" aria-label="<?= (int)($review['rating'] ?? 5) ?> out of 5 stars">
-                            <?php
-                            $rating = (int)($review['rating'] ?? 5);
-                            for ($i = 1; $i <= 5; $i++):
-                            ?>
-                                <span class="star <?= $i <= $rating ? 'star--full' : 'star--empty' ?>" aria-hidden="true">
-                                    <?= $i <= $rating ? '&#9733;' : '&#9734;' ?>
-                                </span>
-                            <?php endfor; ?>
-                        </div>
-
-                        <!-- Review text -->
-                        <blockquote class="review-card__text">
-                            <p><?= htmlspecialchars($review['text'] ?? $review['review_text'] ?? '') ?></p>
-                        </blockquote>
-
-                        <!-- Reviewer info -->
-                        <footer class="review-card__footer">
-                            <span class="review-card__name">
-                                <?= htmlspecialchars($review['name'] ?? $review['author_name'] ?? 'Anonymous') ?>
-                            </span>
-                            <?php if (!empty($review['location'])): ?>
-                                <span class="review-card__location">
-                                    &#8212; <?= htmlspecialchars($review['location']) ?>
-                                </span>
-                            <?php endif; ?>
-                        </footer>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php else: ?>
-            <p class="reviews-empty">No reviews to display yet.</p>
-        <?php endif; ?>
-
-    </div><!-- /.container -->
-</section>
+        </div>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
