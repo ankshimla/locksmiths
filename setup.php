@@ -17,10 +17,11 @@ if (!extension_loaded('pdo_sqlite')) {
     $errors[] = 'PDO SQLite extension is not enabled. Contact your hosting provider to enable it.';
 }
 
-// Check mod_rewrite
-$modRewrite = in_array('mod_rewrite', apache_get_modules() ?? []);
-if (function_exists('apache_get_modules') && !$modRewrite) {
-    $warnings[] = 'mod_rewrite may not be enabled. Clean URLs might not work.';
+// Check mod_rewrite (only if Apache)
+if (function_exists('apache_get_modules')) {
+    if (!in_array('mod_rewrite', apache_get_modules())) {
+        $warnings[] = 'mod_rewrite may not be enabled. Clean URLs might not work.';
+    }
 }
 
 // Check data directory
