@@ -7,8 +7,8 @@
  * 2. Provides a setup check on first run
  */
 
-// Check if this is a setup request
-if (isset($_GET['setup']) || !file_exists(__DIR__ . '/data/cms.db')) {
+// Check if this is a setup request or DB is not configured
+if (isset($_GET['setup']) || !file_exists(__DIR__ . '/data/db-config.php')) {
     require_once __DIR__ . '/setup.php';
     exit;
 }

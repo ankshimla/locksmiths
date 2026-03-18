@@ -1,20 +1,21 @@
 <?php
 /**
  * Setup Wizard - Locksmiths.ie CMS
- * Checks server requirements and installs the database
+ * Checks server requirements, collects MySQL details, and installs the database
  */
 $errors = [];
 $warnings = [];
 $success = false;
+$needsConfig = !file_exists(__DIR__ . '/data/db-config.php');
 
 // Check PHP version
 if (version_compare(PHP_VERSION, '7.4', '<')) {
     $errors[] = 'PHP 7.4 or higher required. Current: ' . PHP_VERSION;
 }
 
-// Check SQLite
-if (!extension_loaded('pdo_sqlite')) {
-    $errors[] = 'PDO SQLite extension is not enabled. Contact your hosting provider to enable it.';
+// Check MySQL PDO
+if (!extension_loaded('pdo_mysql')) {
+    $errors[] = 'PDO MySQL extension is not enabled. Contact your hosting provider to enable it.';
 }
 
 // Check mod_rewrite (only if Apache)
@@ -36,11 +37,43 @@ if (is_dir($dataDir) && !is_writable($dataDir)) {
 }
 
 // Check if already installed
-$alreadyInstalled = file_exists($dataDir . '/cms.db');
+$alreadyInstalled = false;
+if (!$needsConfig) {
+    require_once __DIR__ . '/config/database.php';
+    try {
+        $testDb = getDB();
+        $testDb->query("SELECT 1 FROM services LIMIT 1");
+        $alreadyInstalled = true;
+    } catch (Exception $e) {
+        $alreadyInstalled = false;
+    }
+}
 
 // Handle install action
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install']) && empty($errors)) {
     try {
+        $dbHost = trim($_POST['db_host'] ?? 'localhost');
+        $dbName = trim($_POST['db_name'] ?? '');
+        $dbUser = trim($_POST['db_user'] ?? '');
+        $dbPass = $_POST['db_pass'] ?? '';
+
+        if (empty($dbName) || empty($dbUser)) {
+            throw new Exception('Database name and username are required.');
+        }
+
+        // Test connection first
+        $testDsn = "mysql:host={$dbHost};dbname={$dbName};charset=utf8mb4";
+        $testPdo = new PDO($testDsn, $dbUser, $dbPass);
+        $testPdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Save config
+        $configContent = "<?php\n";
+        $configContent .= "define('DB_HOST', " . var_export($dbHost, true) . ");\n";
+        $configContent .= "define('DB_NAME', " . var_export($dbName, true) . ");\n";
+        $configContent .= "define('DB_USER', " . var_export($dbUser, true) . ");\n";
+        $configContent .= "define('DB_PASS', " . var_export($dbPass, true) . ");\n";
+        file_put_contents(__DIR__ . '/data/db-config.php', $configContent);
+
         require_once __DIR__ . '/config/database.php';
         require_once __DIR__ . '/core/Model.php';
 
@@ -104,6 +137,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install']) && empty($
         .check-fail { background: #ffebee; color: #c62828; }
         .check-warn { background: #fff8e1; color: #f57f17; }
         .check-icon { font-size: 1.2rem; flex-shrink: 0; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 0.3rem; color: #333; font-size: 0.9rem; }
+        .form-group input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        .form-group input:focus { outline: none; border-color: #d4a853; }
+        .form-group small { color: #888; font-size: 0.8rem; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .db-section { background: #f8f9fa; border-radius: 10px; padding: 1.5rem; margin: 1.5rem 0; }
+        .db-section h3 { color: #1a2332; margin-bottom: 1rem; font-size: 1.1rem; }
         .btn-install {
             display: block;
             width: 100%;
@@ -168,8 +216,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install']) && empty($
                 <h3>Admin Panel</h3>
                 <ol>
                     <li>Go to <code>/admin</code> to access the admin panel</li>
-                    <li>Default login: <code>admin</code> / update password in <code>config/database.php</code></li>
-                    <li>Change the <code>ADMIN_PASS_HASH</code> in config/database.php using <code>password_hash('yourpassword', PASSWORD_DEFAULT)</code></li>
+                    <li>Default login: <code>admin</code> / update password in admin Settings page</li>
                 </ol>
             </div>
 
@@ -189,9 +236,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install']) && empty($
                     <span class="check-icon"><?= version_compare(PHP_VERSION, '7.4', '>=') ? '&#10004;' : '&#10008;' ?></span>
                     PHP <?= PHP_VERSION ?> (7.4+ required)
                 </li>
-                <li class="<?= extension_loaded('pdo_sqlite') ? 'check-pass' : 'check-fail' ?>">
-                    <span class="check-icon"><?= extension_loaded('pdo_sqlite') ? '&#10004;' : '&#10008;' ?></span>
-                    PDO SQLite Extension
+                <li class="<?= extension_loaded('pdo_mysql') ? 'check-pass' : 'check-fail' ?>">
+                    <span class="check-icon"><?= extension_loaded('pdo_mysql') ? '&#10004;' : '&#10008;' ?></span>
+                    PDO MySQL Extension
                 </li>
                 <li class="<?= is_dir($dataDir) && is_writable($dataDir) ? 'check-pass' : 'check-fail' ?>">
                     <span class="check-icon"><?= is_dir($dataDir) && is_writable($dataDir) ? '&#10004;' : '&#10008;' ?></span>
@@ -211,19 +258,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['install']) && empty($
             <?php endforeach; ?>
 
             <form method="POST">
+                <div class="db-section">
+                    <h3>&#128451; MySQL Database Details</h3>
+                    <p style="color: #666; font-size: 0.85rem; margin-bottom: 1rem;">Find these in your Cloudways dashboard under Application &gt; Access Details</p>
+                    <div class="form-group">
+                        <label>Database Host</label>
+                        <input type="text" name="db_host" value="<?= htmlspecialchars($_POST['db_host'] ?? 'localhost') ?>" required>
+                        <small>Usually "localhost" on Cloudways</small>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Database Name</label>
+                            <input type="text" name="db_name" value="<?= htmlspecialchars($_POST['db_name'] ?? '') ?>" required placeholder="e.g. eqdueglqgt">
+                        </div>
+                        <div class="form-group">
+                            <label>Database Username</label>
+                            <input type="text" name="db_user" value="<?= htmlspecialchars($_POST['db_user'] ?? '') ?>" required placeholder="e.g. eqdueglqgt">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Database Password</label>
+                        <input type="password" name="db_pass" value="" placeholder="Your MySQL password">
+                    </div>
+                </div>
+
                 <button type="submit" name="install" class="btn-install" <?= !empty($errors) ? 'disabled' : '' ?>>
                     &#128273; Install Locksmiths.ie CMS
                 </button>
             </form>
 
             <div class="info-box">
-                <h3>Hosting Setup Guide</h3>
+                <h3>Where to find your database details (Cloudways)</h3>
                 <ol>
-                    <li><strong>Upload all files</strong> to your web hosting via FTP or File Manager</li>
-                    <li><strong>Set document root</strong> to the <code>public/</code> folder if your host allows it (cPanel &gt; Domains &gt; Document Root). If not, upload to <code>public_html/</code> — the root index.php handles routing.</li>
-                    <li><strong>Set permissions:</strong> <code>chmod 755 data/</code> (or use File Manager &gt; Permissions &gt; 755)</li>
-                    <li><strong>Visit your site</strong> — this setup wizard runs automatically on first visit</li>
-                    <li><strong>SSL:</strong> Enable SSL in your hosting panel (already done if you see https://)</li>
+                    <li>Log in to <strong>Cloudways</strong> dashboard</li>
+                    <li>Go to <strong>Applications</strong> &gt; select your app</li>
+                    <li>Click <strong>Access Details</strong> tab</li>
+                    <li>Find <strong>MySQL Access</strong> section &mdash; copy DB Name, Username, and Password</li>
                 </ol>
             </div>
         <?php endif; ?>

@@ -12,7 +12,10 @@ foreach (glob(__DIR__ . '/../app/models/*.php') as $model) {
 }
 
 // Initialize DB if needed
-if (!file_exists(DB_PATH)) {
+try {
+    $db = getDB();
+    $db->query("SELECT 1 FROM services LIMIT 1");
+} catch (Exception $e) {
     require_once __DIR__ . '/../data/install.php';
     installDatabase();
 }
@@ -202,7 +205,7 @@ function handlePost(string $page, string $action, int $id): void {
 
     if ($page === 'settings' && $action === 'save') {
         foreach ($_POST['settings'] ?? [] as $key => $value) {
-            $stmt = $db->prepare("INSERT OR REPLACE INTO settings (setting_key, setting_value) VALUES (?, ?)");
+            $stmt = $db->prepare("INSERT INTO settings (setting_key, setting_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
             $stmt->execute([$key, trim($value)]);
         }
         header('Location: /admin/?page=settings&saved=1');

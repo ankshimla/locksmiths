@@ -13,6 +13,12 @@ ini_set('log_errors', '1');
 // Load configuration
 require_once __DIR__ . '/../config/database.php';
 
+// Check if database is configured
+if (!DB_CONFIGURED) {
+    header('Location: /index.php?setup=1');
+    exit;
+}
+
 // Autoload core classes
 require_once __DIR__ . '/../core/Model.php';
 require_once __DIR__ . '/../core/Controller.php';
@@ -23,18 +29,11 @@ foreach (glob(__DIR__ . '/../app/models/*.php') as $model) {
     require_once $model;
 }
 
-// Initialize database if needed
-if (!file_exists(DB_PATH)) {
-    // Ensure data directory exists and is writable
-    $dataDir = dirname(DB_PATH);
-    if (!is_dir($dataDir)) {
-        @mkdir($dataDir, 0755, true);
-    }
-    if (!is_writable($dataDir)) {
-        // Redirect to setup wizard
-        header('Location: /index.php?setup=1');
-        exit;
-    }
+// Initialize database if needed (auto-install tables on first run)
+try {
+    $db = getDB();
+    $db->query("SELECT 1 FROM services LIMIT 1");
+} catch (Exception $e) {
     require_once __DIR__ . '/../data/install.php';
     installDatabase();
 }

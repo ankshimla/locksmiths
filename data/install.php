@@ -1,120 +1,129 @@
 <?php
 /**
- * Database Installer - Creates SQLite tables and seeds initial data
+ * Database Installer - Creates MySQL tables and seeds initial data
  * Locksmiths.ie CMS
  */
 
 function installDatabase(): void {
-    $dir = dirname(DB_PATH);
-    if (!is_dir($dir)) {
-        mkdir($dir, 0755, true);
-    }
-
     $db = getDB();
 
     // Create tables
     $db->exec("
         CREATE TABLE IF NOT EXISTS services (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            slug TEXT UNIQUE NOT NULL,
-            title TEXT NOT NULL,
-            meta_title TEXT,
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            slug VARCHAR(255) UNIQUE NOT NULL,
+            title VARCHAR(255) NOT NULL,
+            meta_title VARCHAR(255),
             meta_description TEXT,
-            hero_heading TEXT,
-            hero_subheading TEXT,
+            hero_heading VARCHAR(255),
+            hero_subheading VARCHAR(255),
             content TEXT,
-            icon TEXT,
-            sort_order INTEGER DEFAULT 0,
-            active INTEGER DEFAULT 1,
+            icon VARCHAR(100),
+            sort_order INT DEFAULT 0,
+            active TINYINT DEFAULT 1,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        );
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
 
+    $db->exec("
         CREATE TABLE IF NOT EXISTS locations (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            slug TEXT UNIQUE NOT NULL,
-            name TEXT NOT NULL,
-            county TEXT,
-            meta_title TEXT,
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            slug VARCHAR(255) UNIQUE NOT NULL,
+            name VARCHAR(255) NOT NULL,
+            county VARCHAR(255),
+            meta_title VARCHAR(255),
             meta_description TEXT,
             content TEXT,
-            lat REAL,
-            lng REAL,
-            phone TEXT,
-            active INTEGER DEFAULT 1,
+            lat DOUBLE,
+            lng DOUBLE,
+            phone VARCHAR(50),
+            active TINYINT DEFAULT 1,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        );
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
 
+    $db->exec("
         CREATE TABLE IF NOT EXISTS brands (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            slug TEXT UNIQUE NOT NULL,
-            name TEXT NOT NULL,
-            meta_title TEXT,
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            slug VARCHAR(255) UNIQUE NOT NULL,
+            name VARCHAR(255) NOT NULL,
+            meta_title VARCHAR(255),
             meta_description TEXT,
             content TEXT,
-            logo_url TEXT,
-            active INTEGER DEFAULT 1,
+            logo_url VARCHAR(500),
+            active TINYINT DEFAULT 1,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        );
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
 
+    $db->exec("
         CREATE TABLE IF NOT EXISTS blog_posts (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            slug TEXT UNIQUE NOT NULL,
-            title TEXT NOT NULL,
-            meta_title TEXT,
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            slug VARCHAR(255) UNIQUE NOT NULL,
+            title VARCHAR(255) NOT NULL,
+            meta_title VARCHAR(255),
             meta_description TEXT,
             excerpt TEXT,
             content TEXT,
-            author TEXT DEFAULT 'Locksmiths.ie',
-            featured_image TEXT,
-            published INTEGER DEFAULT 0,
+            author VARCHAR(255) DEFAULT 'Locksmiths.ie',
+            featured_image VARCHAR(500),
+            published TINYINT DEFAULT 0,
             published_at DATETIME,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        );
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
 
+    $db->exec("
         CREATE TABLE IF NOT EXISTS faqs (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INT AUTO_INCREMENT PRIMARY KEY,
             question TEXT NOT NULL,
             answer TEXT NOT NULL,
-            service_id INTEGER,
-            sort_order INTEGER DEFAULT 0,
-            active INTEGER DEFAULT 1,
+            service_id INT,
+            sort_order INT DEFAULT 0,
+            active TINYINT DEFAULT 1,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE SET NULL
-        );
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
 
+    $db->exec("
         CREATE TABLE IF NOT EXISTS reviews (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            customer_name TEXT NOT NULL,
-            rating INTEGER DEFAULT 5,
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            customer_name VARCHAR(255) NOT NULL,
+            rating INT DEFAULT 5,
             review_text TEXT,
-            service_id INTEGER,
-            location_id INTEGER,
-            approved INTEGER DEFAULT 0,
+            service_id INT,
+            location_id INT,
+            approved TINYINT DEFAULT 0,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE SET NULL,
             FOREIGN KEY (location_id) REFERENCES locations(id) ON DELETE SET NULL
-        );
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
 
+    $db->exec("
         CREATE TABLE IF NOT EXISTS quotes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            email TEXT NOT NULL,
-            phone TEXT,
-            service TEXT,
-            location TEXT,
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            email VARCHAR(255) NOT NULL,
+            phone VARCHAR(50),
+            service VARCHAR(255),
+            location VARCHAR(255),
             message TEXT,
-            status TEXT DEFAULT 'new',
+            status VARCHAR(50) DEFAULT 'new',
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        );
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+    ");
 
+    $db->exec("
         CREATE TABLE IF NOT EXISTS settings (
-            key TEXT PRIMARY KEY,
-            value TEXT
-        );
+            setting_key VARCHAR(255) PRIMARY KEY,
+            setting_value TEXT
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
     ");
 
     // Seed services
@@ -132,7 +141,7 @@ function installDatabase(): void {
         ['emergency-callout', 'Emergency Callout', '24/7 Emergency Locksmith Callout | Locksmiths.ie', 'Emergency locksmith callout service available 24 hours a day, 7 days a week across Ireland.', '24/7 Emergency Callout', 'We come to you, day or night', 'phone'],
     ];
 
-    $stmt = $db->prepare("INSERT OR IGNORE INTO services (slug, title, meta_title, meta_description, hero_heading, hero_subheading, icon, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $db->prepare("INSERT IGNORE INTO services (slug, title, meta_title, meta_description, hero_heading, hero_subheading, icon, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
     foreach ($services as $i => $s) {
         $stmt->execute([$s[0], $s[1], $s[2], $s[3], $s[4], $s[5], $s[6], $i]);
     }
@@ -158,7 +167,7 @@ function installDatabase(): void {
         ['wexford', 'Wexford', 'Wexford', 'Locksmiths Wexford | 24/7 Locksmith | Locksmiths.ie', 'Professional locksmith services in Wexford. Emergency lockouts, lock changes, and key cutting services.', 52.3369, -6.4633],
     ];
 
-    $stmt = $db->prepare("INSERT OR IGNORE INTO locations (slug, name, county, meta_title, meta_description, lat, lng) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $db->prepare("INSERT IGNORE INTO locations (slug, name, county, meta_title, meta_description, lat, lng) VALUES (?, ?, ?, ?, ?, ?, ?)");
     foreach ($locations as $l) {
         $stmt->execute($l);
     }
@@ -172,7 +181,7 @@ function installDatabase(): void {
         ['land-rover', 'Land Rover'], ['jaguar', 'Jaguar'], ['mini', 'Mini'], ['fiat', 'Fiat'],
     ];
 
-    $stmt = $db->prepare("INSERT OR IGNORE INTO brands (slug, name, meta_title, meta_description) VALUES (?, ?, ?, ?)");
+    $stmt = $db->prepare("INSERT IGNORE INTO brands (slug, name, meta_title, meta_description) VALUES (?, ?, ?, ?)");
     foreach ($brands as $b) {
         $stmt->execute([
             $b[0], $b[1],
@@ -191,7 +200,7 @@ function installDatabase(): void {
         ['Do you install smart locks?', 'Yes, we supply and install a range of smart locks and digital lock systems for both residential and commercial properties.'],
     ];
 
-    $stmt = $db->prepare("INSERT OR IGNORE INTO faqs (question, answer, sort_order) VALUES (?, ?, ?)");
+    $stmt = $db->prepare("INSERT IGNORE INTO faqs (question, answer, sort_order) VALUES (?, ?, ?)");
     foreach ($faqs as $i => $f) {
         $stmt->execute([$f[0], $f[1], $i]);
     }
@@ -206,7 +215,7 @@ function installDatabase(): void {
         ['Patrick R.', 5, 'Used them for slam locks on our delivery vans. Top quality work and competitive prices.'],
     ];
 
-    $stmt = $db->prepare("INSERT OR IGNORE INTO reviews (customer_name, rating, review_text, approved) VALUES (?, ?, ?, 1)");
+    $stmt = $db->prepare("INSERT IGNORE INTO reviews (customer_name, rating, review_text, approved) VALUES (?, ?, ?, 1)");
     foreach ($reviews as $r) {
         $stmt->execute([$r[0], $r[1], $r[2]]);
     }
@@ -224,13 +233,13 @@ function installDatabase(): void {
         ['social_twitter', 'https://twitter.com/locksmithsie'],
     ];
 
-    $stmt = $db->prepare("INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)");
+    $stmt = $db->prepare("INSERT IGNORE INTO settings (setting_key, setting_value) VALUES (?, ?)");
     foreach ($settings as $s) {
         $stmt->execute($s);
     }
 
     // Seed a blog post
-    $db->exec("INSERT OR IGNORE INTO blog_posts (slug, title, meta_title, meta_description, excerpt, content, published, published_at) VALUES (
+    $db->exec("INSERT IGNORE INTO blog_posts (slug, title, meta_title, meta_description, excerpt, content, published, published_at) VALUES (
         'home-security-tips-ireland',
         '10 Home Security Tips Every Irish Homeowner Should Know',
         '10 Home Security Tips | Locksmiths.ie Blog',
@@ -238,6 +247,6 @@ function installDatabase(): void {
         'Discover the top 10 home security measures recommended by professional locksmiths to keep your Irish home safe and secure.',
         '<h2>Protect Your Home with Expert Advice</h2><p>As professional locksmiths serving Ireland for over 20 years, we have seen it all. Here are our top recommendations for keeping your home secure.</p><h3>1. Upgrade Your Locks</h3><p>Many Irish homes still have outdated cylinder locks that can be easily bypassed. Consider upgrading to anti-snap, anti-pick, and anti-bump cylinders.</p><h3>2. Install a Deadbolt</h3><p>A quality deadbolt on your front and back doors provides an extra layer of security that is difficult to defeat.</p><h3>3. Secure Your Windows</h3><p>Window locks are often overlooked but are a common entry point for burglars. Ensure all windows have functioning locks.</p><h3>4. Consider CCTV</h3><p>Modern CCTV systems are affordable and can be monitored from your smartphone. A visible camera is also an excellent deterrent.</p><h3>5. Use Timer Switches</h3><p>When away, use timer switches on lights and radios to give the impression someone is home.</p>',
         1,
-        CURRENT_TIMESTAMP
+        NOW()
     )");
 }
